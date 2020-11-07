@@ -60,6 +60,7 @@
 #include <locale.h>
 #include "usrmotintf.h"
 #include <rtapi_string.h>
+#include "tooldata.hh"
 
 #if 0
 // Enable this to niftily trap floating point exceptions for debugging
@@ -3275,6 +3276,8 @@ int main(int argc, char *argv[])
     int num_latency_warnings = 0;
     int latency_excursion_factor = 10;  // if latency is worse than (factor * expected), it's an excursion
     double minTime, maxTime;
+fprintf(stderr,"%8d 0_EMCTASKMAIN\n",getpid());
+
 
     bindtextdomain("linuxcnc", EMC2_PO_DIR);
     setlocale(LC_MESSAGES,"");
@@ -3322,6 +3325,12 @@ int main(int argc, char *argv[])
     // moved up from emc_startup so we can expose it in Python right away
     emcStatus = new EMC_STAT;
 
+#ifdef TOOL_MMAP //{
+    tool_mmap_user();
+#else //}{
+    fprintf(stderr,"%8d EMCTASKMAIN register\n",getpid());
+    tool_nml_register((CANON_TOOL_TABLE*)&emcStatus->io.tool.toolTable);
+#endif //}
     // get the Python plugin going
 
     // inistantiate task methods object, too

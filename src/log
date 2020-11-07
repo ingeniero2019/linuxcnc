@@ -1,0 +1,69 @@
+TOOL_NML = yes
+TOOL_MMAP_FLAG =
+TOOLDATA using nml
+Reading 199/199 dependency files
+Done reading dependencies
+Reading 216/216 realtime dependency files
+Done reading realtime dependencies
+Creating shared library liblinuxcncini.so.0
+ln -sf liblinuxcncini.so.0 ../lib/liblinuxcncini.so
+Linking inivar
+Creating shared library libposemath.so.0
+ln -sf libposemath.so.0 ../lib/libposemath.so
+Creating shared library liblinuxcnchal.so.0
+ln -sf liblinuxcnchal.so.0 ../lib/liblinuxcnchal.so
+Creating shared library libnml.so.0
+ln -sf libnml.so.0 ../lib/libnml.so
+Linking halstreamer
+Linking halsampler
+Linking panelui
+Linking mb2hal
+Linking gs2_vfd
+Linking hy_gt_vfd
+Linking svd-ps_vfd
+Linking shuttle
+Linking xhc-hb04
+Linking thermistor
+Linking vfs11_vfd
+Linking classicladder
+Linking hal.so
+Linking halcmd
+Linking halrmt
+Linking halmeter
+Linking halscope
+Linking vfdb_vfd
+Linking wj200_vfd
+Linking hy_vfd
+Linking xhc-whb04b-6
+Linking liblinuxcnc.a
+Linking linuxcnc.so
+Linking linuxcncrsh
+Linking schedrmt
+Linking linuxcnclcd
+tooldata: depends: objects/emc/tooldata/toolnml.o
+tooldata: Linking: libtooldata.so.0
+ln -sf libtooldata.so.0 ../lib/libtooldata.so
+Linking halui
+Linking linuxcncsvr
+Linking libpyplugin.so.0
+g++ -g -L/home/git/linuxcnc-dev/lib -Wl,-rpath,/home/git/linuxcnc-dev/lib   -Wl,-soname,libpyplugin.so.0 -shared -o ../lib/libpyplugin.so.0 objects/emc/pythonplugin/python_plugin.o ../lib/liblinuxcncini.so -lstdc++ -lboost_python -lpython2.7
+ln -sf libpyplugin.so.0 ../lib/libpyplugin.so
+Linking librs274.so.0
+g++ -g -L/home/git/linuxcnc-dev/lib -Wl,-rpath,/home/git/linuxcnc-dev/lib   -Wl,-soname,librs274.so.0 -shared -o ../lib/librs274.so.0 objects/emc/rs274ngc/interp_arc.o objects/emc/rs274ngc/interp_array.o objects/emc/rs274ngc/interp_base.o objects/emc/rs274ngc/interp_check.o objects/emc/rs274ngc/interp_convert.o objects/emc/rs274ngc/interp_queue.o objects/emc/rs274ngc/interp_cycles.o objects/emc/rs274ngc/interp_execute.o objects/emc/rs274ngc/interp_find.o objects/emc/rs274ngc/interp_internal.o objects/emc/rs274ngc/interp_inverse.o objects/emc/rs274ngc/interp_read.o objects/emc/rs274ngc/interp_write.o objects/emc/rs274ngc/interp_o_word.o objects/emc/rs274ngc/interp_g7x.o objects/emc/rs274ngc/modal_state.o objects/emc/rs274ngc/nurbs_additional_functions.o objects/emc/rs274ngc/interp_namedparams.o objects/emc/rs274ngc/interp_python.o objects/emc/rs274ngc/interp_remap.o objects/emc/rs274ngc/interp_setup.o objects/emc/rs274ngc/canonmodule.o objects/emc/rs274ngc/pyparamclass.o objects/emc/rs274ngc/pyemctypes.o objects/emc/rs274ngc/pyinterp1.o objects/emc/rs274ngc/pyblock.o objects/emc/rs274ngc/pyarrays.o objects/emc/rs274ngc/interpmodule.o objects/emc/rs274ngc/rs274ngc_pre.o objects/emc/rs274ngc/interp_inspection.o ../lib/liblinuxcncini.so ../lib/libpyplugin.so ../lib/liblinuxcnchal.so.0 ../lib/libtooldata.so.0 -lstdc++ -lboost_python -lpython2.7 -ldl 
+Linking milltask
+g++ -o ../bin/milltask objects/emc/motion/emcmotglb.o objects/emc/task/emctask.o objects/emc/task/emccanon.o objects/emc/task/emctaskmain.o objects/emc/motion/usrmotintf.o objects/emc/motion/emcmotutil.o objects/emc/task/taskintf.o objects/emc/motion/dbuf.o objects/emc/motion/stashf.o objects/emc/rs274ngc/tool_parse.o objects/emc/task/taskmodule.o objects/emc/task/taskclass.o objects/emc/task/backtrace.o ../lib/librs274.so.0 ../lib/liblinuxcnc.a ../lib/libnml.so.0 ../lib/liblinuxcncini.so.0 ../lib/libposemath.so.0 ../lib/liblinuxcnchal.so.0 ../lib/libpyplugin.so.0 ../lib/libtooldata.so.0 -L/home/git/linuxcnc-dev/lib -Wl,-rpath,/home/git/linuxcnc-dev/lib   -lboost_python -lpython2.7
+Linking io
+Linking genserkins
+ln -sf librs274.so.0 ../lib/librs274.so
+Linking libcanterp.so.0
+ln -sf libcanterp.so.0 ../lib/libcanterp.so
+Linking rs274
+Compiling emc/motion-logger/motion-logger.c
+Linking motion-logger
+Linking python module _hal.so
+../lib/python/linuxcnc.so
+objects/emc/usr_intf/axis/extensions/emcmodule.o
+Linking python module linuxcnc.so
+Linking python module gcode.so
+g++ -L/home/git/linuxcnc-dev/lib -Wl,-rpath,/home/git/linuxcnc-dev/lib   -shared -o ../lib/python/gcode.so objects/emc/rs274ngc/gcodemodule.o ../lib/librs274.so.0 -lstdc++
+You now need to run 'sudo make setuid' in order to run in place with access to hardware.

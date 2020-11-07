@@ -1,0 +1,23 @@
+Reading 199/199 dependency files
+Done reading dependencies
+Reading 216/216 realtime dependency files
+Done reading realtime dependencies
+Compiling emc/nml_intf/emcops.cc
+emc/nml_intf/emcops.cc: In constructor ‘EMC_TOOL_STAT::EMC_TOOL_STAT()’:
+emc/nml_intf/emcops.cc:159:9: warning: unused variable ‘t’ [-Wunused-variable]
+     int t;
+         ^
+emc/nml_intf/emcops.cc: In member function ‘EMC_TOOL_STAT EMC_TOOL_STAT::operator=(EMC_TOOL_STAT)’:
+emc/nml_intf/emcops.cc:224:9: warning: unused variable ‘t’ [-Wunused-variable]
+     int t;
+         ^
+Linking liblinuxcnc.a
+Linking linuxcnc.so
+Linking linuxcncrsh
+Linking schedrmt
+Linking linuxcnclcd
+Linking halui
+make: *** Deleting file '../bin/halui'
+make: *** wait: No child processes.  Stop.
+make: *** Waiting for unfinished jobs....
+make: *** wait: No child processes.  Stop.

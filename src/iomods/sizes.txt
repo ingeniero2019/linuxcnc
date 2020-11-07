@@ -1,0 +1,37 @@
+   10272___EMC_STAT
+    1072_____EMC_TASK_STAT
+    8392_____EMC_MOTION_STAT
+     696_____EMC_IO_STAT
+     696___EMC_IO_STAT
+     224_____EMC_TOOL_STAT
+     112_____EMC_COOLANT_STAT
+     112_____EMC_AUX_STAT
+     112_____EMC_LUBE_STAT
+    8392___EMC_MOTION_STAT
+     624_____EMC_TRAJ_STAT
+     216_____EMC_JOINT_STAT
+     136_____EMC_AXIS_STAT
+     168_____EMC_SPINDLE_STAT
+       8___emcStatus
+     696___emcioStatus
+       8___emcioCommand
+
+master:
+  122272___EMC_STAT
+    1072_____EMC_TASK_STAT
+    8392_____EMC_MOTION_STAT
+  112696_____EMC_IO_STAT
+  112696___EMC_IO_STAT
+  112224_____EMC_TOOL_STAT
+     112_____EMC_COOLANT_STAT
+     112_____EMC_AUX_STAT
+     112_____EMC_LUBE_STAT
+    8392___EMC_MOTION_STAT
+     624_____EMC_TRAJ_STAT
+     216_____EMC_JOINT_STAT
+     136_____EMC_AXIS_STAT
+     168_____EMC_SPINDLE_STAT
+       8___emcStatus
+  112696___emcioStatus
+       8___emcioCommand
+

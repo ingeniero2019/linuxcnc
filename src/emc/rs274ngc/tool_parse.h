@@ -22,16 +22,22 @@ extern "C"  {
 #endif
 
 int loadToolTable(const char *filename,
-	struct CANON_TOOL_TABLE toolTable[CANON_POCKETS_MAX],
-	char *ttcomments[CANON_POCKETS_MAX],
-	int random_toolchanger
-	);
+#ifdef TOOL_MMAP //{
+#else //}{
+       struct CANON_TOOL_TABLE toolTable[CANON_POCKETS_MAX],
+#endif //}
+       char *ttcomments[CANON_POCKETS_MAX],
+       int random_toolchanger
+);
 
 int saveToolTable(const char *filename,
-	CANON_TOOL_TABLE toolTable[],
-	char *ttcomments[CANON_POCKETS_MAX],
-	int random_toolchanger
-	);
+#ifdef TOOL_MMAP //{
+#else //}{
+       struct CANON_TOOL_TABLE toolTable[CANON_POCKETS_MAX],
+#endif //}
+       char *ttcomments[CANON_POCKETS_MAX],
+       int random_toolchanger
+);
 
 #ifdef CPLUSPLUS
 }

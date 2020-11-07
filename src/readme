@@ -1,0 +1,147 @@
+tooltable internal data: refactor
+
+this branch is force pushed, rebased at d45281759
+
+tl;dr:
+    default configure:           internal tool data in mmap
+    configure --enable-toolnml:  internal tool data by nml
+
+#-------------------------------------------------------------
+Tool table information is read from a file [EMCIO]TOOL_TABLE
+and the internalized data is used by:
+  o [TASK]TASK       (typ: bin/milltask (dirs: emc/task emc/rs274ngc))
+  o [EMCIO]EMCIO     (typ: bin/io       (dirs: emc/iotask))
+  o [DISPLAY]DISPLAY (typ: bin/axis,tklinuxcnc, .., etc)
+  o [HAL]HALUI       (typ: bin/halui)
+
+Note: The above processes are all userspace, the realtime
+      motion module:
+         [EMCMOT]EMCMOT=motmod (dir: emc/motion)
+      accesses tool information as required from shared
+      memory (rtapi_shmem) as managed by bin/milltask
+
+#-------------------------------------------------------------
+
+In this commit, internal tool table data is made available
+to milltask, io, uis, etc. using a memory mapped (mmap)
+region by default.
+
+The nml EMC_TOOL_STAT class no longer includes the full array:
+    CANON_TOOL_TABLE toolTable[CANON_POCKETS_MAX];
+But continues to provide:
+    int pocketPrepped;
+    int toolInSpindle;
+and now includes a single instance:
+    struct CANON_TOOL_TABLE toolTableCurrent;
+
+Access to internal tool table data is provided by
+new put/get functions (idx is the pocket-based index):
+
+  tool_tbl_put(struct CANON_TOOL_TABLE t,int idx);
+  tool_tbl_get(int idx);
+  tool_tbl_last_index_set(int idx);
+  tool_tbl_last_index_get(void);
+
+The new tool_mmap facility provides access to the above
+functions using setup functions provided as:
+
+  tool_mmap_creator(EMC_TOOL_STAT *);
+  tool_mmap_user(void);
+  tool_mmap_close(void);
+
+All accesses to the mmap region are made mutually
+exclusive using an rtapi_mutex_t.
+
+The number of allowed pockets (CANON_POCKETS_MAX=1001) is
+unchanged but the number of pocket indices available is based
+on reading of the ini-specified tool table file using:
+  emc/rs274ngc/tool_parse.cc:(load_tool_table())
+
+Impact:
+  Upsides
+    a) Reduced message size communicated between
+       milltask and io at the intervals set by:
+       [TASK]CYCLE_TIME and [EMCIO]CYCLE_TIME 
+    b) Gui tool table arrays (typ named: tool_table[])
+       are now sized to support only the number of pockets
+       read from the tool table file ([EMCIO]TOOL_TABLE)
+       instead of a fixed (and large) number (1001) needed
+       to support extreme machines with hundreds of pockets.
+           
+  Downsides (see also Legacy support below):
+    a) The complete toolTable[] data for all (1001)
+       CANON_POCKETS_MAX is no longer available should someone
+       implement a *remote* ui with TASK and EMCIO
+       implemented on separate machines using networked (TCP)
+       nml messages.  A single tool table instance for
+       the current tool in spindle is included in the 
+       TOOL_STAT message.
+
+Legacy support;
+  A confgure option (--enable-toolnml) enables use
+  of legacy nml-messaged internal tool data instead of
+  mmmapped data based on the compile-time setting for
+  CANON_POCKETS_MAX (1001)
+  Example:
+    $ ./configure --enable-toolnml --with-realtime=uspace
+
+#-------------------------------------------------------------
+Notes:
+1) With no changes to the tests/ directory, runtests passed on:
+   a) Debian GNU/Linux 10 (buster)
+      4.19.0-10-amd64 #1 SMP Debian 4.19.132-1 (2020-07-24) x86_64 GNU/Linux
+   b) Debian GNU/Linux 7.9 (wheezy) (virtual machine)
+      3.4-9-rtai-686-pae #1 SMP PREEMPT Debian 3.4.55-4linuxcnc i686 GNU/Linux
+
+2) The memory mapped file used is named: /tmp/tool.mmap
+
+3) A debugging utility is provided to read the mmap region
+   Usage:
+      $ tool_mmap_read #(NA for --enable-toolnml)
+
+4) A debugging utility is provided to monitor key nml
+   message items that are not part of the internal
+   tool data.  These include current:
+     pocketPrepped
+     toolInSpindle
+     Pocket
+     diameter,x-offset,...
+   Usage:
+     $ tool_watch
+   
+5) buffer sizes in configs/common/linuxcnc.nml used for mmap:
+      B emcStatus   20480
+      B toolSts      1024
+
+6) buffer sizes in configs/common/linuxcnc_big.nml used for
+   configure --enable-toolnml:
+      B emcStatus  170000
+      B toolSts    131072
+
+7) STAT class sizes using mmap (64bit 4.19.0-10-amd640:
+    10272___EMC_STAT
+          696___EMC_IO_STAT
+             224___EMC_TOOL_STAT
+             112___EMC_COOLANT_STAT
+             112___EMC_AUX_STAT
+             112___EMC_LUBE_STAT
+         8392___EMC_MOTION_STAT
+             624___EMC_TRAJ_STAT
+             216___EMC_JOINT_STAT
+             136___EMC_AXIS_STAT
+             168___EMC_SPINDLE_STAT
+         1072___EMC_TASK_STAT
+
+7) STAT class sizes using nml:
+   122272___EMC_STAT
+       112696___EMC_IO_STAT
+          112224___EMC_TOOL_STAT
+             112___EMC_COOLANT_STAT
+             112___EMC_AUX_STAT
+             112___EMC_LUBE_STAT
+         8392___EMC_MOTION_STAT
+             624___EMC_TRAJ_STAT
+             216___EMC_JOINT_STAT
+             136___EMC_AXIS_STAT
+             168___EMC_SPINDLE_STAT
+         1072___EMC_TASK_STAT
